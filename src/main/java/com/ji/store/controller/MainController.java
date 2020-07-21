@@ -12,10 +12,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ji.store.dto.UserDto;
@@ -45,7 +47,7 @@ public class MainController
 	
 	@GetMapping("/goToMainPage" )
 	public ModelAndView goToMainPage (Model model, Authentication auth, HttpServletResponse response, HttpServletRequest request )
-	{
+	{System.out.println("FASDFADSFASDFASD>... " + auth.getAuthorities().toString());
 		String returnUrl = "";
 		ModelAndView mv = new ModelAndView();
 
@@ -75,26 +77,44 @@ public class MainController
 	}
 	
 	@PostMapping("/checkUser")
-	public CyResult<String> checkUser(String user_id)
+	public @ResponseBody CyResult<Void> checkUser(String user_id)
 	{
-		CyResult<String> result = new CyResult<String>();
+		System.out.println("!!!!!!!!!!!!!! " + user_id);
+		CyResult<Void> result = new CyResult<Void>();
 		
-		if(userMapper.selectUserById(user_id) != null) result.setCode(Constant.RESULT_FAIL_CODE_03);
-		else result.setCode(Constant.RESULT_SUCCESS_CODE);
-		
+		if( userMapper.selectUserById( user_id ) != null ) result.setCode(Constant.RESULT_FAIL_CODE_03); 
+		else result.setCode( Constant.RESULT_SUCCESS_CODE );	
 		return result;
 	}
 	
 	@PostMapping("/join")
-	public CyResult<String> joinMember(UserDto userDto)
+	public @ResponseBody CyResult<String> joinMember( UserDto userDto )
 	{
 		CyResult<String> result = new CyResult<String>();
 		
-		String pwd = EncryptUtils.encryptSHA256(userDto.getPwd(), userDto.getUserId().getBytes()).toUpperCase();
+		if( StringUtils.isEmpty( userDto.getUser_id() ) || StringUtils.isEmpty( userDto.getPassword() ) )
+		{
+			result.setCode(Constant.RESULT_FAIL_CODE_01);
+			result.setMessage("필수항목이 누락되었습니다.");
+			return result;
+		}
 		
-		// DATABASE 등록
+		String pwd = EncryptUtils.encryptSHA256( userDto.getPassword(), userDto.getUser_id().getBytes() ).toUpperCase();
+		userDto.setPassword( pwd );
+
+		int val = userMapper.insertUser( userDto );
 		
-		result.setCode(Constant.RESULT_SUCCESS_CODE);
+		if(val == 1)
+		{
+			result.setCode( Constant.RESULT_SUCCESS_CODE );	
+			result.setMessage( "회원가입 성공" );
+		}
+		else 
+		{
+			result.setCode( Constant.RESULT_FAIL_CODE_03 );	
+			result.setMessage( "회원가입 실패, 다시 시도" );			
+		}
+		
 		return result;
 	}
 }

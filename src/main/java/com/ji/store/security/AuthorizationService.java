@@ -23,7 +23,7 @@ public class AuthorizationService
 		{
 			String input_pwd = EncryptUtils.encryptSHA256(pwd, userId.getBytes()).toUpperCase();
 			
-			if(user.getPwd().equals(input_pwd)) 
+			if(user.getPassword().equals(input_pwd)) 
 			{
 				return user;
 			}

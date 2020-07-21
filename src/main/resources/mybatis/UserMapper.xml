@@ -3,17 +3,23 @@
 
 <mapper namespace="com.ji.store.mapper.UserMapper">
 	<!-- BASIC COLUMN -->
+	<!-- BASIC COLUMN -->
 	<sql id="column-basic">
-		userId, userNm, pwd, auth_level
+		user_id, user_nm, password, email, auth_level, phone_num, zip_code, address, detail_address, regist_dt
 	</sql>
+	
+	<insert id="insertUser" parameterType="com.ji.store.dto.UserDto">
+		INSERT INTO public.user( user_id, user_nm, password, email, phone_num, address, detail_address, zip_code, auth_level, regist_dt)
+		VALUES( #{user_id}, #{user_nm}, #{password}, #{email}, #{phone_num}, #{address}, #{detail_address}, #{zip_code}, #{auth_level}, CURRENT_TIMESTAMP )
+	</insert>
 	
 	<select id="selectUserById" parameterType="String" resultType="com.ji.store.dto.UserDto">
 		SELECT
 			<include refid="column-basic" />
 		FROM
-			User
+			public.user
 		WHERE
-			<!-- binary(userId) = #{userId} -->
-			userId = #{userId}
+			<!-- binary(user_id) = #{user_id} -->
+			user_id = #{user_id}
 	</select>
 </mapper>

@@ -165,7 +165,7 @@
 			datatype	:	"json",
 			data		:	{ "user_id" : $("#user_id").val() },
 			success		:	function(responseData)
-			{
+			{	
 				if("00" == responseData.code) 
 				{
 					check = true;
