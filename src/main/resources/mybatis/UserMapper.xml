@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ji.store.mapper.UserMapper">
+	<!-- BASIC COLUMN -->
+	<sql id="column-basic">
+		userId, userNm, pwd, auth_level
+	</sql>
+	
+	<select id="selectUserById" parameterType="String" resultType="com.ji.store.dto.UserDto">
+		SELECT
+			<include refid="column-basic" />
+		FROM
+			User
+		WHERE
+			<!-- binary(userId) = #{userId} -->
+			userId = #{userId}
+	</select>
+</mapper>
