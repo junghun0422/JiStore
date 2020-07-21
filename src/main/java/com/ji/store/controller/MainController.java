@@ -1,6 +1,7 @@
 package com.ji.store.controller;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ji.store.dto.UserDto;
+import com.ji.store.entity.UserEntity;
 import com.ji.store.mapper.UserMapper;
+import com.ji.store.repository.UserRepository;
 import com.ji.store.utils.Constant;
 import com.ji.store.utils.CyResult;
 import com.ji.store.utils.EncryptUtils;
@@ -30,6 +34,9 @@ import com.ji.store.utils.EncryptUtils;
 public class MainController 
 {
 	private static Logger log = LoggerFactory.getLogger( MainController.class );
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Resource( name = "userMapper" )
 	private UserMapper userMapper;
@@ -79,11 +86,22 @@ public class MainController
 	@PostMapping("/checkUser")
 	public @ResponseBody CyResult<Void> checkUser(String user_id)
 	{
-		System.out.println("!!!!!!!!!!!!!! " + user_id);
 		CyResult<Void> result = new CyResult<Void>();
+		
+//		Optional<UserEntity> userEntity = userRepository.findById( user_id );
+//		
+//		if(userEntity.isPresent())
+//		{
+//			System.out.println("존재하는 아이디....");
+//		}
+//		else
+//		{
+//			log.debug("사용가능한 아이디");
+//		}
 		
 		if( userMapper.selectUserById( user_id ) != null ) result.setCode(Constant.RESULT_FAIL_CODE_03); 
 		else result.setCode( Constant.RESULT_SUCCESS_CODE );	
+
 		return result;
 	}
 	
