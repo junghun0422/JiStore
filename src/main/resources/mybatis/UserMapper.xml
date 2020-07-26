@@ -17,7 +17,8 @@
 		SELECT
 			<include refid="column-basic" />
 		FROM
-			public.user
+			<!-- public.user -->
+			user
 		WHERE
 			<!-- binary(user_id) = #{user_id} -->
 			user_id = #{user_id}

@@ -43,9 +43,9 @@ public class AuthProvider implements AuthenticationProvider
 			case 0 :
 				role = "ROLE_ADMIN";
 				break;
-			case 1 :
-				role = "ROLE_SELLER";
-				break;
+//			case 1 :
+//				role = "ROLE_SELLER";
+//				break;
 			case 2 :
 				role = "ROLE_CUSTOMER";
 				break;

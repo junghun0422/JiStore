@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ji.store.mapper.ReportsMapper">
+	<select id="reportsList" resultType="com.ji.store.dto.ReportsDto">
+		SELECT * 
+		FROM
+			reports
+	</select>
+	
+	<select id="reportSize" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			reports
+	</select>
+	
+	<select id="selectReportsPaging" parameterType="com.ji.store.dto.ReportsDto"  resultType="com.ji.store.dto.ReportsDto">
+		SELECT
+			*
+		FROM
+			reports
+		LIMIT #{page_index}, #{total_cnt}
+	</select>
+</mapper>
